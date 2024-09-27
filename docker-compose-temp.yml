@@ -1,0 +1,60 @@
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+  movie-catalog-service:
+    build: ./movie-catalog-service
+    ports:
+      - '3001:3000'
+    depends_on:
+      - mongo
+  movie-repository-service:
+    build: ./movie-repository-service
+    ports:
+      - '3002:3000'
+    depends_on:
+      - mongo
+  movie-info-service:
+    build: ./movie-info-service
+    ports:
+      - '3003:3000'
+    depends_on:
+      - mongo
+  movie-rating-service:
+    build: ./movie-rating-service
+    ports:
+      - '3004:3000'
+    depends_on:
+      - mongo
+  auth-service:
+    build: ./auth-service
+    ports:
+      - '3005:3000'
+    depends_on:
+      - mongo
+  movie-review-frontend:
+    build:
+      context: ./movie-review-app
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    networks:
+      - movie-app-network
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  movie-app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
